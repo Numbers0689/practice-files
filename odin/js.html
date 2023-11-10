@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>JS Fundamentals</title>
+    </head>
+
+    <body>
+        <script>
+            function mycat(inp) {
+                return inp.charAt(inp.length - 1)
+            }
+
+            console.log(mycat("What"))
+
+            function first(letter) {
+                let lett_small = letter.toLowerCase()
+                let lett_smallcap = lett_small.charAt(0).toUpperCase()
+                return lett_smallcap + lett_small.slice(1,)
+            }
+
+            console.log(first("fuckyouclg"))
+        </script>
+    </body>
+</html>
