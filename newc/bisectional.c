@@ -20,5 +20,5 @@ int main()
 
 int bisectionalSearch(int array[], int n)
 {
-    
+     
 }
