@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>My spending record</title>
-    <link href="minimal-table.css" rel="stylesheet" type="text/css">
+    <link href="minimal.css" rel="stylesheet" type="text/css">
     <style>
     </style>
   </head>
@@ -13,17 +13,21 @@
 
       <table>
         <caption>How I chose to spend my money</caption>
-          <tr>
-            <th>Purchase</th>
-            <th>Location</th>
-            <th>Date</th>
-            <th>Evaluation</th>
-            <th>Cost (€)</th>
-          </tr>
-          <tr>
-            <td>SUM</td>
-            <td>118</td>
-          </tr>
+          <thead>
+            <tr>
+                <th>Purchase</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Evaluation</th>
+                <th>Cost (€)</th>
+              </tr>
+          </thead>
+          <tfoot>
+            <tr>
+                <td colspan="4">SUM</td>
+                <td>118</td>
+              </tr>
+          </tfoot>
           <tr>
             <td>Haircut</td>
             <td>Hairdresser</td>
