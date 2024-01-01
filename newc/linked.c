@@ -21,7 +21,7 @@ int main() {
             conductor = conductor->next;
         }
     }
-    
+
     conductor->next = malloc( sizeof(struct node) );  
  
     conductor = conductor->next; 
@@ -34,6 +34,7 @@ int main() {
 
     conductor->next = 0;         
     conductor->x = 42;
+    printf("%d\n", conductor->x);
  
     return 0;
 }
