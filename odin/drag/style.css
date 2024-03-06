@@ -1,0 +1,9 @@
+div {
+    border: 2px solid white;
+    height: 5000px;
+    width: 3000px;
+}
+
+body {
+    background-color: black;
+}
