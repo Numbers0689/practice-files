@@ -1,17 +1,26 @@
 #include<stdio.h>
+#include<ctype.h>
+
+void copyt(char *source, char *add) {
+    while (*source!='\0') {
+        source++;
+    }
+    while (*add)
+    {
+        if (isalpha(*add) || *add == ' ')
+        {
+            *source = *add;
+            source++;
+        }
+        add++;        
+    }
+    *source = '\0';
+}
 
 int main() {
-    int days;
-    printf("enter days: ");
-    scanf("%d", &days);
-    int years, months, weeks;
-    years = days/365;
-    days %= 365;
-    months = days/30;
-    days %= 30;
-    weeks = days/7;
-    days %= 7;
-
-    printf("years = %d\nmonths = %d\nweeks = %d\ndays = %d\n", years, months, weeks, days);
+    char str[]="wrwerrwr";
+    char str1[]="424 ffgregreg 24 $$ ere";
+    copyt(str, str1);
+    printf("%s\n", str);
     return 0;
 }
