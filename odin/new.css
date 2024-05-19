@@ -1,0 +1,15 @@
+#ani {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    animation: examples 5s ease-in 2s infinite reverse;
+}
+
+@keyframes example {
+    0% {background-color: yellow; left: 0px; top: 0px;}
+    25% {background-color: red; left: 200px; top: 0px;}
+    50% {background-color: black; left: 200px; top: 200px;}
+    75% {background-color: yellow; left: 0px; top: 200px;}
+    100% {background-color: red; left: 0px; top: 0px;}    
+}

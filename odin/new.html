@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Feedback</title>
+    <script>
+        function oki(event) {
+            let x = event.clientX;
+            let y = event.clientY;
+            let c = document.querySelector('#can');
+            let r = Math.floor(Math.random()*256);
+            let g = Math.floor(Math.random()*256);
+            let b = Math.floor(Math.random()*256);
+            let ctx = c.getContext('2d');
+            mycolor = "rgb("+r+","+g+","+b+")";
+            ctx.fillStyle = mycolor;
+            ctx.beginPath();
+            ctx.arc(x,y,40,0,360);
+            ctx.fill();
+        }
+    </script>
+</head>
+<body>
+    <canvas id="can" width="600" height="600" onmousemove="oki(event)" style="border: 2px solid black;"></canvas>
+
+</body>
+</html>
