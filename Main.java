@@ -1,5 +1,13 @@
 public class Main {
+
     public static void main(String[] args) {
-        System.out.println(args[0] + " oriented " + args[1]);
-    }
-}
+
+        int x = 5;
+    
+        x *= (2 + 8);
+    
+        System.out.println(x);
+    
+      }
+  
+  }
