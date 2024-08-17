@@ -25,36 +25,53 @@
     <body>
         <img src="#">
         <div>
-            <input type="text">
+            <input type="text" name="searchkey" id="searchkey">
             <button>Search</button>
         </div>
         <script>
             const img = document.querySelector('img');
-            const imput = document.querySelector('input');
+            const input = document.querySelector('input');
             const button = document.querySelector('button');
             let url = "https://api.giphy.com/v1/gifs/translate?api_key=#&s="
-            fetch(url+"cat", {mode:"cors"})
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(response) {
-                    img.src = response.data.images.original.url;
-                })
-                .catch(e => {
+            // fetch(url+"cat", {mode:"cors"})
+            //     .then(function(response) {
+            //         return response.json();
+            //     })
+            //     .then(function(response) {
+            //         img.src = response.data.images.original.url;
+            //         console.log("fsf");
+            //     })
+            //     .catch(e => {
+            //         console.log(e);
+            //     });
+
+            // button.addEventListener("click", () => {
+            //     fetch(url+input.value, {mode:"cors"})
+            //     .then(function(response) {
+            //         return response.json();
+            //     })
+            //     .then(function(response) {
+            //         img.src = response.data.images.original.url;
+            //     })
+            //     .catch(e => {
+            //         console.log(e);
+            //     });
+            // });
+
+            async function getgifs(val) {
+                try {
+                    const response = await fetch(url + val, {mode:"cors"});
+                    const gifdata = await response.json();
+                    img.src = gifdata.data.images.original.url;
+                } catch(e) {
                     console.log(e);
-                });
+                }
+            }
+
+            getgifs("cat");
 
             button.addEventListener("click", () => {
-                fetch(url+imput.value, {mode:"cors"})
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(response) {
-                    img.src = response.data.images.original.url;
-                })
-                .catch(e => {
-                    console.log(e);
-                });
+                getgifs(input.value);
             });
         </script>
     </body>
