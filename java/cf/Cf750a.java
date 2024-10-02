@@ -1,9 +1,18 @@
+
 import java.util.*;
 import java.io.*;
 
-public class Template {
+public class Cf750a {
     public static void main(String[] args) {
-        // FastScanner sc = new FastScanner();
+        FastScanner sc = new FastScanner();
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+        int c = 240 - k, i;
+        for (i = 1; i <= n; i++) {
+            c -= 5*i;
+            if (c < 0) break;
+        }
+        System.out.print(i-1);
     }
 }
 
@@ -25,4 +34,3 @@ class FastScanner {
         return Long.parseLong(next());
     }
 }
-
