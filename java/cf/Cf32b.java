@@ -1,9 +1,17 @@
 import java.util.*;
 import java.io.*;
 
-public class Template {
+public class Cf32b {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
+        String s = sc.next();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '.') sb.append("0");
+            else if (s.charAt(++i) == '.') sb.append("1");
+            else sb.append("2");
+        }
+        System.out.print(sb.toString());
     }
 }
 

@@ -1,9 +1,12 @@
 import java.util.*;
 import java.io.*;
 
-public class Template {
+public class At101 {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
+        String s = sc.next();
+        if (s.substring(s.length()-3).equals("san")) System.out.print("Yes");
+        else System.out.print("No");
     }
 }
 
