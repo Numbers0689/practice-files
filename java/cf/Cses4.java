@@ -1,9 +1,16 @@
 import java.util.*;
 import java.io.*;
 
-public class Template {
+public class Cses4 {
     public static void main(String[] args) {
-        // FastScanner sc = new FastScanner();
+        FastScanner sc = new FastScanner();
+        int t = sc.nextInt();
+        int x, y;
+        for (int i = 0; i < t; i++) {
+            y = sc.nextInt();
+            x = sc.nextInt();
+        }
+        
     }
 }
 

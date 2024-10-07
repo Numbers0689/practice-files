@@ -1,9 +1,19 @@
 import java.util.*;
 import java.io.*;
 
-public class Template {
+public class Cf237a {
     public static void main(String[] args) {
-        // FastScanner sc = new FastScanner();
+        FastScanner sc = new FastScanner();
+        int n = sc.nextInt(), h, m, r = 1, t;
+        Set<Integer> s = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            h = sc.nextInt();
+            m = sc.nextInt();
+            t = h*100+m;
+            if (s.contains(t)) r++;
+            else s.add(t);
+        }
+        System.out.print(r);
     }
 }
 
