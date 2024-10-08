@@ -1,25 +1,25 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf237a {
+public class Cf2020a {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
-        int n = sc.nextInt();
-        int h, m, h0, m0, c = 1, max = 1;
-        h = sc.nextInt();
-        m = sc.nextInt();
-        while (--n > 0) {
-            h0 = sc.nextInt();
-            m0 = sc.nextInt();
-            if (h == h0 && m == m0) c++;
-            else {
-                c = 1;
-                h = h0;
-                m = m0;
+        int t = sc.nextInt();
+        int n, k, c;
+        for (int i = 0; i < t; i++) {
+            n = sc.nextInt();
+            k = sc.nextInt();
+            c = 0;
+            if (k == 1 || n < k) {
+                System.out.println(n); 
+                continue;
             }
-            if (c > max) max = c;
+            while (n > 0) {
+                c += n%k;
+                n /= k;
+            }
+            System.out.println(c);
         }
-        System.out.print(max);
     }
 }
 
