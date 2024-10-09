@@ -1,0 +1,35 @@
+import java.util.*;
+import java.io.*;
+
+public class Cf579a {
+    public static void main(String[] args) {
+        FastScanner sc = new FastScanner();
+        int x = sc.nextInt();
+        int c = 0;
+        while (x > 0)  {
+            c += x & 1;
+            x >>= 1;
+        }
+        System.out.print(c);
+    }
+}
+
+class FastScanner {
+    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st=new StringTokenizer("");
+    String next() {
+        while (!st.hasMoreTokens())
+            try { 
+                st=new StringTokenizer(br.readLine());				               
+            } catch (IOException e) {}
+        return st.nextToken();
+    }
+    
+    int nextInt() {
+        return Integer.parseInt(next());
+    }
+    long nextLong() {
+        return Long.parseLong(next());
+    }
+}
+
