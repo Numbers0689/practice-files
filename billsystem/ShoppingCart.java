@@ -31,11 +31,11 @@ public class ShoppingCart {
             details.append(entry.getKey().getName())
                    .append(" x ")
                    .append(entry.getValue())
-                   .append(" = $")
+                   .append(" = ₹")
                    .append(entry.getKey().getPrice() * entry.getValue())
                    .append("\n");
         }
-        details.append("Total: $").append(calculateTotal());
+        details.append("Total: ₹").append(calculateTotal());
         return details.toString();
     }
 }
