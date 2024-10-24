@@ -1,31 +1,22 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf467b {
+public class Cf2026a {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
-        int n, m, k, c =0;
-        n = sc.nextInt();
-        m = sc.nextInt();
-        k = sc.nextInt();
-        int[] x = new int[m+1];
-        for (int i = 0; i < m+1; i++) {
-            x[i] = sc.nextInt();
+        int t = sc.nextInt(), n, x, j;
+        for (int i = 0; i < t; i++) {
+            n = sc.nextInt();
+            j = 0;
+            x = 0;
+            while (n >= Math.abs(x)) {
+                j++;
+                if (j % 2 == 0) x += 2*j-1;
+                else x -= (2*j-1);
+            }
+            if (j % 2 == 0) System.out.println("Kosuke");
+            else System.out.println("Sakurako");
         }
-        for (int i = 0; i < m; i++) {
-            if (c(x[i], x[m], n) <= k) c++;
-        }
-        System.out.print(c);
-    }
-
-    public static int c(int x, int b, int n) {
-        int a = x ^ b;
-        int c = 0;
-        for (int i = 0; i < n; i++) {
-            if ((a & 1) == 1) c++;
-            a >>= 1;
-        }
-        return c;
     }
 }
 

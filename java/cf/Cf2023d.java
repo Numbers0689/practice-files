@@ -1,29 +1,32 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf467b {
+public class Cf2023d {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
-        int n, m, k, c =0;
-        n = sc.nextInt();
-        m = sc.nextInt();
-        k = sc.nextInt();
-        int[] x = new int[m+1];
-        for (int i = 0; i < m+1; i++) {
-            x[i] = sc.nextInt();
+        int t = sc.nextInt();
+        for (int i = 0; i < t; i++) {
+            int n = sc.nextInt();
+            int[] a = new int[n];
+            for (int j = 0; j < n; j++) a[j] = sc.nextInt();
+            System.out.println(max(a));
         }
-        for (int i = 0; i < m; i++) {
-            if (c(x[i], x[m], n) <= k) c++;
-        }
-        System.out.print(c);
     }
 
-    public static int c(int x, int b, int n) {
-        int a = x ^ b;
+    private static int max(int[] a) {
+        int ps = 0;
         int c = 0;
-        for (int i = 0; i < n; i++) {
-            if ((a & 1) == 1) c++;
-            a >>= 1;
+        Set<Integer> ss = new HashSet<>();
+        ss.add(0); 
+        for (int num : a) {
+            ps += num;
+            if (ss.contains(ps)) {
+                c++;
+                ss.clear();
+                ss.add(0); 
+                ps = 0;   
+            }
+            ss.add(ps);
         }
         return c;
     }
