@@ -9,10 +9,9 @@ public class Cf59e {
         n = sc.nextInt();
         m = sc.nextInt();
         k = sc.nextInt();
-        for (int i = 0; i < m; i++) {
-            adj.get(sc.nextInt()).add(sc.nextInt());
-        }
-        for (int u : adj.get(1)) System.out.println(u);
+        for (int i= 0; i < m; i++) adj.add(new ArrayList<>());
+        for (int i = 0; i < m; i++) adj.get(sc.nextInt()).add(sc.nextInt());
+        
     }
 }
 
