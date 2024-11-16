@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Template {
     public static void main(String[] args) {
-        // FastScanner sc = new FastScanner();
+        FastScanner sc = new FastScanner();
     }
 }
 
