@@ -66,3 +66,19 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.cid {
+  border-radius: 15px;
+  padding: 30px 20px;
+  background-color: #213547;
+  text-align: center;
+  font-size: large;
+  color: aliceblue;
+  font-family: 'Courier New', Courier, monospace;
+  margin: auto 40vw;
+}
+
+.cid > img {
+  width: 180px;
+  height: 100px;
+}
