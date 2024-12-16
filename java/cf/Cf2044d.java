@@ -7,16 +7,25 @@ public class Cf2044d {
         int t = sc.nextInt();
         while (t-- > 0) {
             int n = sc.nextInt();
-            List<Integer> a = new ArrayList<>();
+            int[] a = new int[n];
             Set<Integer> s = new HashSet<>();
+            int[] b = new int[n];
             for (int i = 0; i < n; i++) {
-                a.add(sc.nextInt());
-                s.add(a.get(i));
+                a[i] = sc.nextInt();
+                if (!s.contains(a[i])) {
+                    b[i] = a[i];
+                    s.add(a[i]);
+                } else {
+                    int num = (int) (Math.random() * (n) + 1);
+                    while (s.contains(num)) {
+                        num = (int) (Math.random() * (n) + 1);
+                    }
+                    b[i] = num;
+                    s.add(num);
+                }
+                System.out.print(b[i] + " ");
             }
-            int m = 0;
-            for (int i = 0; i < n; i++) {
-                
-            }
+            System.out.println();
         }
     }
 }
