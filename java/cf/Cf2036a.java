@@ -1,25 +1,21 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf2044e {
+public class Cf2036a {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
         int t = sc.nextInt();
         while (t-- > 0) {
-            int k, l1, r1, l2, r2;
-            k = sc.nextInt();
-            l1 = sc.nextInt();
-            r1 = sc.nextInt();
-            l2 = sc.nextInt();
-            r2 = sc.nextInt();
-
-            long count = 0;
-            long kn = 1;
-            while (true) {
-                if (l1 * kn > r2) break;
-                
+            int n = sc.nextInt();
+            int[] a = new int[n];
+            String ans = "YES";
+            a[0] = sc.nextInt();
+            for (int i = 1; i < n; i++) {
+                a[i] = sc.nextInt();
+                int x = Math.abs(a[i] - a[i-1]);
+                if (!(x == 5 || x == 7)) ans = "NO";
             }
-            System.out.println(count);
+            System.out.println(ans);
         }
     }
 }
