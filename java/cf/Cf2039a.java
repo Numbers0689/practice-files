@@ -1,26 +1,16 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf2044e {
+public class Cf2039a {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
         int t = sc.nextInt();
         while (t-- > 0) {
-            int k, l1, r1, l2, r2;
-            k = sc.nextInt();
-            l1 = sc.nextInt();
-            r1 = sc.nextInt();
-            l2 = sc.nextInt();
-            r2 = sc.nextInt();
-
-            long count = 0;
-            long kn = 1;
-            while (true) {
-                if (l1 * kn > r2) break;
-                int lx, rx;
-                lx = Math.max(l1);
+            int n = sc.nextInt();
+            for (int i = 1; i <= n; i++) {
+                System.out.print(2*i-1 + " ");
             }
-            System.out.println(count);
+            System.out.println();
         }
     }
 }
