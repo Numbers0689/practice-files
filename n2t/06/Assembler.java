@@ -1,19 +1,19 @@
 import java.io.*;
 import java.util.*;
-import parser.*;
-import writer.*;
 
 public class Assembler {
     public static void main(String[] args) throws IOException {
         String filename = args[0];
+        String outfilename = filename.replace(".asm", ".hack");
 
-        FileParser f = new FileParser();
         Convertor c;
+        Resolve r = new Resolve();
+        FileParser f = new FileParser(r);
         try {
             f.parseFile(filename);
-            f.printParsedLines();
             c = new Convertor(f.getParsedLines());
-            c.translate();
+            Write w = new Write(c.translate(), outfilename);
+            w.writeToFile();
 
         } catch (IOException e) {}
         
