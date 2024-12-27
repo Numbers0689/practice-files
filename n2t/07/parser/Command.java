@@ -1,0 +1,7 @@
+package parser;
+
+public enum Command {
+    C_ARITHMETIC,
+    C_PUSH,
+    C_POP
+}
