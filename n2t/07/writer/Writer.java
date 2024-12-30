@@ -16,11 +16,11 @@ public class Writer {
 
     }
 
-    public void writePushPop(Command c) {
-
+    public void writePushPop(Command c, String segment, int index) {
+        
     }
 
     public void close() {
-
+        outFile.close();
     }
 }
