@@ -29,6 +29,7 @@ public class Convertor {
         cIns.put("A+1", "110111");
         cIns.put("A-1", "110010");
         cIns.put("D+A", "000010");
+        cIns.put("A+D", "000010");
         cIns.put("D-A", "010011");
         cIns.put("A-D", "000111");
         cIns.put("D&A", "000000");
