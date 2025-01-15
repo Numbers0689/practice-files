@@ -175,6 +175,30 @@ public class Writer {
         }
     }
 
+    public void writeLable(String lable) {
+
+    }
+
+    public void writeGoto(String lable) {
+
+    }
+
+    public void writeIf(String lable) {
+
+    }
+
+    public void writeFunction(String functionName, int nVars) {
+
+    }
+
+    public void writeCall(String functionName, int nArgs) {
+
+    }
+
+    public void writeReturn() {
+
+    }
+
     public void close() {
         outFile.close();
     }
