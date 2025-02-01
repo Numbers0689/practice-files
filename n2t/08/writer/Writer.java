@@ -176,11 +176,12 @@ public class Writer {
     }
 
     public void writeLable(String lable) {
-
+        outFile.println("(" + lable + ")");
     }
 
     public void writeGoto(String lable) {
-
+        outFile.println("@" + lable);
+        outFile.println("0;JMP");
     }
 
     public void writeIf(String lable) {

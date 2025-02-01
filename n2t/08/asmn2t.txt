@@ -1,0 +1,93 @@
+writeInit:
+    @256
+    D=A
+    @SP
+    M=D
+    Sys.init: writeCall (Sys.init, 0)
+        @{RETURN_LABLEi}
+        D=A
+        @SP
+        A=M
+        M=D
+        @SP
+        M=M+1
+        push LCL, ARG, THIS, THAT (with loadsegment and pushDtoStack)
+        @SP
+        D=M
+        @5
+        D=D-A
+        @{no of args}
+        D=D-A
+        @ARG
+        M=D
+        @SP
+        D=M
+        @LCL
+        M=D
+        @{fn name}
+        0;JMP
+        ({RETURN_LABLE i})
+
+writeLable:
+    ({lable_name})
+
+writeGoto:
+    @{lable_name}
+    0;JMP
+
+writeIf:
+    pushStackptrtoD
+    decrement
+    loadStackptrtoD
+    @{lable_name}
+    D;JNE
+
+(SP increment in writePushPop - check****)
+
+writeFunction:
+    ({fn name})
+    push constant 0 - no. of args time
+
+writeReturn:
+    @LCL
+    D=M
+    @FRAME
+    M=D
+    @5
+    A=D-A
+    D=M
+    @RET
+    M=D
+    pop arg 0
+    @ARG
+    D=M
+    @SP
+    M=D+1
+    @FRAME
+    D=M-1
+    AM=D
+    D=M
+    @THAT
+    M=D
+    @FRAME
+    D=M-1
+    AM=D
+    D=M
+    @THIS
+    M=D
+    @FRAME
+    D=M-1
+    AM=D
+    D=M
+    @ARG
+    M=D
+    @FRAME
+    D=M-1
+    AM=D
+    D=M
+    @LCL
+    M=D
+    @RET
+    A=M
+    0;JMP
+
