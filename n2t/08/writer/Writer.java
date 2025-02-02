@@ -12,7 +12,7 @@ public class Writer {
         lableCount = 0;
 
         try {
-            outFile = new PrintWriter(new BufferedWriter(new FileWriter(filename.replace(".asm", ""))));
+            outFile = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
         } catch (IOException e) {}
     }
 
@@ -26,7 +26,7 @@ public class Writer {
                 popStacktoD();
                 decrementStack();
                 loadStackPtrtoA();
-                outFile.println("M=M+D");
+                outFile.println("M=D+M");
                 incrementStack();
                 break;
 
@@ -89,50 +89,59 @@ public class Writer {
                     case "constant":
                         outFile.println("@" + index);
                         outFile.println("D=A");
+                        outFile.println("@SP");
+                        outFile.println("AM=M+1");
+                        outFile.println("A=A-1");
+                        outFile.println("M=D");
                         break;
                 
                     case "local":
                         loadSegment("LCL", index);
                         outFile.println("D=M");
+                        pushDtoStack();
                         break;
                     case "argument":
                         loadSegment("ARG", index);
                         outFile.println("D=M");
+                        pushDtoStack();
                         break;
                     case "this":
                         loadSegment("THIS", index);
                         outFile.println("D=M");
+                        pushDtoStack();
                         break;
                     case "that":
                         loadSegment("THAT", index);
                         outFile.println("D=M");
+                        pushDtoStack();
                         break;
 
                     case "temp":
                         outFile.println("@R"+ (5 + index));
                         outFile.println("D=M");
+                        pushDtoStack();
                         break;
 
                     case "pointer":
                         outFile.println("@R"+ (3 + index));
                         outFile.println("D=M");
+                        pushDtoStack();
                         break;
 
                     case "static":
                         outFile.println("@" + outFilename + "." + index);
                         outFile.println("D=M");
+                        pushDtoStack();
                         break;
 
                     default:
                         break;
                 }
-                pushDtoStack();
                 break;
         
             case C_POP:
                     switch (segment) {
                         case "constant":
-                            outFile.println("@" + index);
                             break;
                         
                         case "local":
@@ -166,7 +175,7 @@ public class Writer {
                         default:
                             break;
                     }
-                    outFile.println("D=A");
+                    outFile.println("D=D+A");
                     outFile.println("@R13");
                     outFile.println("M=D");
                     pushDtoStack();

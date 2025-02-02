@@ -7,12 +7,12 @@ public class Parser {
     private String currentCommand;
     private int index;
 
-    public Parser(String filename) {
+    public Parser(File file) {
 
         this.parsedLines = new ArrayList<>();
         this.index = 0;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -26,7 +26,9 @@ public class Parser {
 
                 this.parsedLines.add(line);
             }
-        } catch(IOException e) {}
+        } catch(IOException e) {
+            System.out.println("Problem opening and reading file: " + file.getName());
+        }
     }
 
     public boolean hasMoreLines() {
@@ -63,6 +65,31 @@ public class Parser {
             case "not":
                 c = Command.C_ARITHMETIC;
                 break;
+
+            case "call":
+                c = Command.C_CALL;
+                break;
+
+            case "function":
+                c = Command.C_FUNCTION;
+                break;
+            
+            case "goto":
+                c = Command.C_GOTO;
+                break;
+
+            case "if-goto":
+                c = Command.C_IF;
+                break;
+
+            case "return":
+                c = Command.C_RETURN;
+                break;
+
+            case "label":
+                c = Command.C_LABEL;
+                break;
+                
             default:
                 c = Command.C_ERROR;
                 break;
