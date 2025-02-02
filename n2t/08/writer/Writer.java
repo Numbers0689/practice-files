@@ -9,12 +9,15 @@ public class Writer {
     int lableCount;
 
     public Writer(String filename) {
-        outFilename = filename.replace(".asm", "");
         lableCount = 0;
 
         try {
-            outFile = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
+            outFile = new PrintWriter(new BufferedWriter(new FileWriter(filename.replace(".asm", ""))));
         } catch (IOException e) {}
+    }
+
+    public void setFileName(String filename) {
+        outFilename = filename;
     }
 
     public void writeArithmetic(String command) {
@@ -185,19 +188,99 @@ public class Writer {
     }
 
     public void writeIf(String lable) {
-
+        outFile.println("@SP");
+        outFile.println("AM=M-1");
+        outFile.println("D=M");
+        outFile.println("@" + lable);
+        outFile.println("D;JNE");
     }
 
     public void writeFunction(String functionName, int nVars) {
+        outFile.println("(" + functionName + ")");
 
+        for (int i = 0; i < nVars; i++) writePushPop(Command.C_PUSH, "constant", 0);
+    }
+
+    public void writeInit() {
+        outFile.println("@256");
+        outFile.println("D=A");
+        outFile.println("@SP");
+        outFile.println("M=D");
+        writeCall("Sys.init", 0);
     }
 
     public void writeCall(String functionName, int nArgs) {
+        String lable = functionName + "$ret." + lableCount;
+        lableCount++;
+        String[] segs = {"LCL", "ARG", "THIS", "THAT"};
 
+        outFile.println("@" + lable);
+        outFile.println("D=A");
+        pushDtoStack();
+
+        for (String seg : segs) {
+            outFile.println("@" + seg);
+            outFile.println("D=M");
+            pushDtoStack();
+        }
+
+        outFile.println("@SP");
+        outFile.println("D=M");
+        outFile.println("@5");
+        outFile.println("D=D-A");
+        outFile.println("@" + nArgs);
+        outFile.println("D=D-A");
+        outFile.println("@ARG");
+        outFile.println("M=D");
+
+        outFile.println("@SP");
+        outFile.println("D=M");
+        outFile.println("@LCL");
+        outFile.println("M=D");
+
+        outFile.println("@" + functionName);
+        outFile.println("0;JMP");
+
+        outFile.println("(" + lable + ")");
     }
 
     public void writeReturn() {
+        String[] segs = {"THAT", "THIS", "ARG", "LCL"};
 
+        outFile.println("@LCL");
+        outFile.println("D=M");
+        outFile.println("@R13");
+        outFile.println("M=D");
+
+        outFile.println("@5");
+        outFile.println("A=D-A");
+        outFile.println("D=M");
+        outFile.println("@R14");
+        outFile.println("M=D");
+
+        outFile.println("@SP");
+        outFile.println("AM=M-1");
+        outFile.println("D=M");
+        outFile.println("@ARG");
+        outFile.println("A=M");
+        outFile.println("M=D");
+
+        outFile.println("@ARG");
+        outFile.println("D=M+1");
+        outFile.println("@SP");
+        outFile.println("M=D");
+
+        for (String seg : segs) {
+            outFile.println("@R13");
+            outFile.println("AM=M-1");
+            outFile.println("D=M");
+            outFile.println("@" + seg);
+            outFile.println("M=D");
+        }
+
+        outFile.println("@R14");
+        outFile.println("A=M");
+        outFile.println("0;JMP");
     }
 
     public void close() {
