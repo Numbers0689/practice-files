@@ -1,0 +1,78 @@
+class Game {
+    field Square s;
+    field int dir;
+
+    constructor Game new() {
+        let s = Square.new(0, 0, 30);
+        let dir = 0;
+        return this;
+    }
+
+    method void dispose() {
+        do s.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void run() {
+        var char key;
+        var boolean exit;
+
+        let exit = false;
+
+        while (~exit) {
+
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+                do moveSq();
+            }
+
+            if (key = 81) {
+                let exit = true;
+            }
+            if (key = 90) {
+                do s.decSize();
+            }
+            if (key = 88) {
+                do s.incSize();
+            }
+            if (key = 131) {
+                let dir = 1;
+            }
+            if (key = 133) {
+                let dir = 2;
+            }
+            if (key = 130) {
+                let dir = 3;
+            }
+            if (key = 132) {
+                let dir = 4;
+            }
+
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do moveSq();
+            }
+        }
+
+        return;
+    }
+
+    method void moveSq() {
+        if (dir = 1) {
+            do s.moveUp();
+        }
+        if (dir = 2) {
+            do s.moveDown();
+        }
+        if (dir = 3) {
+            do s.moveLeft();
+        }
+        if (dir = 4) {
+            do s.moveRight();
+        }
+
+        do Sys.wait(5);
+        return;
+    }
+}
