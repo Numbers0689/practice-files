@@ -1,22 +1,24 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf2065b {
+public class Cf2072a {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
         int t = sc.nextInt();
+        int n, k, p;
+        while(t-- > 0) {
+            n = sc.nextInt();
+            k = sc.nextInt();
+            p = sc.nextInt();
 
-        while (t-- > 0) {
-            String s = sc.next();
-            boolean f = false;
-            for (int i = 1; i < s.length(); i++) {
-                if (s.charAt(i) == s.charAt(i-1)) {
-                    f = true;
-                }
+            int x = Math.abs(k) / Math.abs(p);
+            if (x > n) System.out.println(-1);
+            else if (x == n && Math.abs(k) % Math.abs(p) == 0) System.out.println(x);
+            else if (x == n && Math.abs(k) % Math.abs(p) != 0) System.out.println(-1);
+            else if (x < n) {
+                if (Math.abs(k) % Math.abs(p) == 0) System.out.println(x);
+                else System.out.println(x + 1);
             }
-
-            if (f) System.out.println(1);
-            else System.out.println(s.length());
         }
     }
 }
