@@ -1,0 +1,772 @@
+======================================================================================================== test session starts ========================================================================================================
+platform linux -- Python 3.13.1, pytest-8.3.4, pluggy-1.5.0 -- /home/numberssai/numbersss/repos/pytorch/venv/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase(PosixPath('/home/numberssai/numbersss/repos/practice-files/pytorchos/inductor-test/.hypothesis/examples'))
+rootdir: /home/numberssai/numbersss/repos/practice-files/pytorchos/inductor-test
+plugins: hypothesis-6.127.3, typeguard-4.3.0
+collected 8 items                                                                                                                                                                                                                   
+
+test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype0] FAILED                                                                                                                                                   [ 12%]
+test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype1] FAILED                                                                                                                                                   [ 25%]
+test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype2] FAILED                                                                                                                                                   [ 37%]
+test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype3] FAILED                                                                                                                                                   [ 50%]
+test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype4] FAILED                                                                                                                                                   [ 62%]
+test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype5] FAILED                                                                                                                                                   [ 75%]
+test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype6] FAILED                                                                                                                                                   [ 87%]
+test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype7] FAILED                                                                                                                                                   [100%]
+
+============================================================================================================= FAILURES ==============================================================================================================
+___________________________________________________________________________________________ test_slice_scatter_dtype_consistency[dtype0] ____________________________________________________________________________________________
+
+dtype = torch.int8
+
+    @pytest.mark.parametrize("dtype", [torch.int8, torch.int16, torch.int32, torch.int64,
+                                       torch.uint8, torch.uint16, torch.uint32, torch.uint64])
+    def test_slice_scatter_dtype_consistency(dtype):
+        model = Model()
+        x = torch.tensor([0], dtype=dtype)  # Create tensor of given dtype
+    
+        # Run with Eager
+        eager_output = model(x)
+    
+        # Run with Inductor
+        compiled_model = torch.compile(model, backend="inductor")
+>       inductor_output = compiled_model(x)
+
+test_inductor_types.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../pytorch/torch/nn/modules/module.py:1751: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+../../../pytorch/torch/nn/modules/module.py:1762: in _call_impl
+    return forward_call(*args, **kwargs)
+../../../pytorch/torch/_dynamo/eval_frame.py:590: in _fn
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+../../../pytorch/torch/_inductor/compile_fx.py:763: in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+../../../pytorch/torch/_inductor/compile_fx.py:748: in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+../../../pytorch/torch/_inductor/compile_fx.py:1440: in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+../../../pytorch/torch/_inductor/compile_fx.py:1091: in codegen_and_compile
+    graph.run(*example_inputs)
+../../../pytorch/torch/_inductor/graph.py:875: in run
+    return super().run(*args)
+../../../pytorch/torch/fx/interpreter.py:171: in run
+    self.env[node] = self.run_node(node)
+../../../pytorch/torch/_inductor/graph.py:1512: in run_node
+    result = super().run_node(n)
+../../../pytorch/torch/fx/interpreter.py:240: in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+../../../pytorch/torch/_inductor/graph.py:1183: in call_function
+    raise LoweringException(e, target, args, kwargs).with_traceback(
+../../../pytorch/torch/_inductor/graph.py:1173: in call_function
+    out = lowerings[target](*args, **kwargs)  # type: ignore[index]
+../../../pytorch/torch/_inductor/lowering.py:463: in wrapped
+    out = decomp_fn(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = TensorBox(StorageBox(
+  Pointwise(
+    'cpu',
+    torch.float32,
+    def inner_fn(index):
+        _ = index
+        tm...)
+        return tmp0
+    ,
+    ranges=[1],
+    origin_node=full_default,
+    origins=OrderedSet([full_default])
+  )
+))
+src = TensorBox(StorageBox(
+  InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.int8, size=[1], stride=[1]))
+)), dim = 0, start = None, end = None, step = 1
+
+    @register_lowering(aten.slice_scatter, type_promotion_kind=None)
+    def slice_scatter(x, src, dim=0, start=None, end=None, step=1):
+>       assert x.get_dtype() == src.get_dtype()
+E       torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+E         target: aten.slice_scatter.default
+E         args[0]: TensorBox(StorageBox(
+E           Pointwise(
+E             'cpu',
+E             torch.float32,
+E             def inner_fn(index):
+E                 _ = index
+E                 tmp0 = ops.constant(0.0, torch.float32)
+E                 return tmp0
+E             ,
+E             ranges=[1],
+E             origin_node=full_default,
+E             origins=OrderedSet([full_default])
+E           )
+E         ))
+E         args[1]: TensorBox(StorageBox(
+E           InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.int8, size=[1], stride=[1]))
+E         ))
+E       
+E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+../../../pytorch/torch/_inductor/lowering.py:2892: InductorError
+___________________________________________________________________________________________ test_slice_scatter_dtype_consistency[dtype1] ____________________________________________________________________________________________
+
+dtype = torch.int16
+
+    @pytest.mark.parametrize("dtype", [torch.int8, torch.int16, torch.int32, torch.int64,
+                                       torch.uint8, torch.uint16, torch.uint32, torch.uint64])
+    def test_slice_scatter_dtype_consistency(dtype):
+        model = Model()
+        x = torch.tensor([0], dtype=dtype)  # Create tensor of given dtype
+    
+        # Run with Eager
+        eager_output = model(x)
+    
+        # Run with Inductor
+        compiled_model = torch.compile(model, backend="inductor")
+>       inductor_output = compiled_model(x)
+
+test_inductor_types.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../pytorch/torch/nn/modules/module.py:1751: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+../../../pytorch/torch/nn/modules/module.py:1762: in _call_impl
+    return forward_call(*args, **kwargs)
+../../../pytorch/torch/_dynamo/eval_frame.py:590: in _fn
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+../../../pytorch/torch/_inductor/compile_fx.py:763: in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+../../../pytorch/torch/_inductor/compile_fx.py:748: in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+../../../pytorch/torch/_inductor/compile_fx.py:1440: in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+../../../pytorch/torch/_inductor/compile_fx.py:1091: in codegen_and_compile
+    graph.run(*example_inputs)
+../../../pytorch/torch/_inductor/graph.py:875: in run
+    return super().run(*args)
+../../../pytorch/torch/fx/interpreter.py:171: in run
+    self.env[node] = self.run_node(node)
+../../../pytorch/torch/_inductor/graph.py:1512: in run_node
+    result = super().run_node(n)
+../../../pytorch/torch/fx/interpreter.py:240: in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+../../../pytorch/torch/_inductor/graph.py:1183: in call_function
+    raise LoweringException(e, target, args, kwargs).with_traceback(
+../../../pytorch/torch/_inductor/graph.py:1173: in call_function
+    out = lowerings[target](*args, **kwargs)  # type: ignore[index]
+../../../pytorch/torch/_inductor/lowering.py:463: in wrapped
+    out = decomp_fn(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = TensorBox(StorageBox(
+  Pointwise(
+    'cpu',
+    torch.float32,
+    def inner_fn(index):
+        _ = index
+        tm...)
+        return tmp0
+    ,
+    ranges=[1],
+    origin_node=full_default,
+    origins=OrderedSet([full_default])
+  )
+))
+src = TensorBox(StorageBox(
+  InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.int16, size=[1], stride=[1]))
+)), dim = 0, start = None, end = None, step = 1
+
+    @register_lowering(aten.slice_scatter, type_promotion_kind=None)
+    def slice_scatter(x, src, dim=0, start=None, end=None, step=1):
+>       assert x.get_dtype() == src.get_dtype()
+E       torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+E         target: aten.slice_scatter.default
+E         args[0]: TensorBox(StorageBox(
+E           Pointwise(
+E             'cpu',
+E             torch.float32,
+E             def inner_fn(index):
+E                 _ = index
+E                 tmp0 = ops.constant(0.0, torch.float32)
+E                 return tmp0
+E             ,
+E             ranges=[1],
+E             origin_node=full_default,
+E             origins=OrderedSet([full_default])
+E           )
+E         ))
+E         args[1]: TensorBox(StorageBox(
+E           InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.int16, size=[1], stride=[1]))
+E         ))
+E       
+E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+../../../pytorch/torch/_inductor/lowering.py:2892: InductorError
+___________________________________________________________________________________________ test_slice_scatter_dtype_consistency[dtype2] ____________________________________________________________________________________________
+
+dtype = torch.int32
+
+    @pytest.mark.parametrize("dtype", [torch.int8, torch.int16, torch.int32, torch.int64,
+                                       torch.uint8, torch.uint16, torch.uint32, torch.uint64])
+    def test_slice_scatter_dtype_consistency(dtype):
+        model = Model()
+        x = torch.tensor([0], dtype=dtype)  # Create tensor of given dtype
+    
+        # Run with Eager
+        eager_output = model(x)
+    
+        # Run with Inductor
+        compiled_model = torch.compile(model, backend="inductor")
+>       inductor_output = compiled_model(x)
+
+test_inductor_types.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../pytorch/torch/nn/modules/module.py:1751: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+../../../pytorch/torch/nn/modules/module.py:1762: in _call_impl
+    return forward_call(*args, **kwargs)
+../../../pytorch/torch/_dynamo/eval_frame.py:590: in _fn
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+../../../pytorch/torch/_inductor/compile_fx.py:763: in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+../../../pytorch/torch/_inductor/compile_fx.py:748: in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+../../../pytorch/torch/_inductor/compile_fx.py:1440: in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+../../../pytorch/torch/_inductor/compile_fx.py:1091: in codegen_and_compile
+    graph.run(*example_inputs)
+../../../pytorch/torch/_inductor/graph.py:875: in run
+    return super().run(*args)
+../../../pytorch/torch/fx/interpreter.py:171: in run
+    self.env[node] = self.run_node(node)
+../../../pytorch/torch/_inductor/graph.py:1512: in run_node
+    result = super().run_node(n)
+../../../pytorch/torch/fx/interpreter.py:240: in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+../../../pytorch/torch/_inductor/graph.py:1183: in call_function
+    raise LoweringException(e, target, args, kwargs).with_traceback(
+../../../pytorch/torch/_inductor/graph.py:1173: in call_function
+    out = lowerings[target](*args, **kwargs)  # type: ignore[index]
+../../../pytorch/torch/_inductor/lowering.py:463: in wrapped
+    out = decomp_fn(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = TensorBox(StorageBox(
+  Pointwise(
+    'cpu',
+    torch.float32,
+    def inner_fn(index):
+        _ = index
+        tm...)
+        return tmp0
+    ,
+    ranges=[1],
+    origin_node=full_default,
+    origins=OrderedSet([full_default])
+  )
+))
+src = TensorBox(StorageBox(
+  InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.int32, size=[1], stride=[1]))
+)), dim = 0, start = None, end = None, step = 1
+
+    @register_lowering(aten.slice_scatter, type_promotion_kind=None)
+    def slice_scatter(x, src, dim=0, start=None, end=None, step=1):
+>       assert x.get_dtype() == src.get_dtype()
+E       torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+E         target: aten.slice_scatter.default
+E         args[0]: TensorBox(StorageBox(
+E           Pointwise(
+E             'cpu',
+E             torch.float32,
+E             def inner_fn(index):
+E                 _ = index
+E                 tmp0 = ops.constant(0.0, torch.float32)
+E                 return tmp0
+E             ,
+E             ranges=[1],
+E             origin_node=full_default,
+E             origins=OrderedSet([full_default])
+E           )
+E         ))
+E         args[1]: TensorBox(StorageBox(
+E           InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.int32, size=[1], stride=[1]))
+E         ))
+E       
+E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+../../../pytorch/torch/_inductor/lowering.py:2892: InductorError
+___________________________________________________________________________________________ test_slice_scatter_dtype_consistency[dtype3] ____________________________________________________________________________________________
+
+dtype = torch.int64
+
+    @pytest.mark.parametrize("dtype", [torch.int8, torch.int16, torch.int32, torch.int64,
+                                       torch.uint8, torch.uint16, torch.uint32, torch.uint64])
+    def test_slice_scatter_dtype_consistency(dtype):
+        model = Model()
+        x = torch.tensor([0], dtype=dtype)  # Create tensor of given dtype
+    
+        # Run with Eager
+        eager_output = model(x)
+    
+        # Run with Inductor
+        compiled_model = torch.compile(model, backend="inductor")
+>       inductor_output = compiled_model(x)
+
+test_inductor_types.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../pytorch/torch/nn/modules/module.py:1751: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+../../../pytorch/torch/nn/modules/module.py:1762: in _call_impl
+    return forward_call(*args, **kwargs)
+../../../pytorch/torch/_dynamo/eval_frame.py:590: in _fn
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+../../../pytorch/torch/_inductor/compile_fx.py:763: in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+../../../pytorch/torch/_inductor/compile_fx.py:748: in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+../../../pytorch/torch/_inductor/compile_fx.py:1440: in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+../../../pytorch/torch/_inductor/compile_fx.py:1091: in codegen_and_compile
+    graph.run(*example_inputs)
+../../../pytorch/torch/_inductor/graph.py:875: in run
+    return super().run(*args)
+../../../pytorch/torch/fx/interpreter.py:171: in run
+    self.env[node] = self.run_node(node)
+../../../pytorch/torch/_inductor/graph.py:1512: in run_node
+    result = super().run_node(n)
+../../../pytorch/torch/fx/interpreter.py:240: in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+../../../pytorch/torch/_inductor/graph.py:1183: in call_function
+    raise LoweringException(e, target, args, kwargs).with_traceback(
+../../../pytorch/torch/_inductor/graph.py:1173: in call_function
+    out = lowerings[target](*args, **kwargs)  # type: ignore[index]
+../../../pytorch/torch/_inductor/lowering.py:463: in wrapped
+    out = decomp_fn(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = TensorBox(StorageBox(
+  Pointwise(
+    'cpu',
+    torch.float32,
+    def inner_fn(index):
+        _ = index
+        tm...)
+        return tmp0
+    ,
+    ranges=[1],
+    origin_node=full_default,
+    origins=OrderedSet([full_default])
+  )
+))
+src = TensorBox(StorageBox(
+  InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.int64, size=[1], stride=[1]))
+)), dim = 0, start = None, end = None, step = 1
+
+    @register_lowering(aten.slice_scatter, type_promotion_kind=None)
+    def slice_scatter(x, src, dim=0, start=None, end=None, step=1):
+>       assert x.get_dtype() == src.get_dtype()
+E       torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+E         target: aten.slice_scatter.default
+E         args[0]: TensorBox(StorageBox(
+E           Pointwise(
+E             'cpu',
+E             torch.float32,
+E             def inner_fn(index):
+E                 _ = index
+E                 tmp0 = ops.constant(0.0, torch.float32)
+E                 return tmp0
+E             ,
+E             ranges=[1],
+E             origin_node=full_default,
+E             origins=OrderedSet([full_default])
+E           )
+E         ))
+E         args[1]: TensorBox(StorageBox(
+E           InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.int64, size=[1], stride=[1]))
+E         ))
+E       
+E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+../../../pytorch/torch/_inductor/lowering.py:2892: InductorError
+___________________________________________________________________________________________ test_slice_scatter_dtype_consistency[dtype4] ____________________________________________________________________________________________
+
+dtype = torch.uint8
+
+    @pytest.mark.parametrize("dtype", [torch.int8, torch.int16, torch.int32, torch.int64,
+                                       torch.uint8, torch.uint16, torch.uint32, torch.uint64])
+    def test_slice_scatter_dtype_consistency(dtype):
+        model = Model()
+        x = torch.tensor([0], dtype=dtype)  # Create tensor of given dtype
+    
+        # Run with Eager
+        eager_output = model(x)
+    
+        # Run with Inductor
+        compiled_model = torch.compile(model, backend="inductor")
+>       inductor_output = compiled_model(x)
+
+test_inductor_types.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../pytorch/torch/nn/modules/module.py:1751: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+../../../pytorch/torch/nn/modules/module.py:1762: in _call_impl
+    return forward_call(*args, **kwargs)
+../../../pytorch/torch/_dynamo/eval_frame.py:590: in _fn
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+../../../pytorch/torch/_inductor/compile_fx.py:763: in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+../../../pytorch/torch/_inductor/compile_fx.py:748: in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+../../../pytorch/torch/_inductor/compile_fx.py:1440: in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+../../../pytorch/torch/_inductor/compile_fx.py:1091: in codegen_and_compile
+    graph.run(*example_inputs)
+../../../pytorch/torch/_inductor/graph.py:875: in run
+    return super().run(*args)
+../../../pytorch/torch/fx/interpreter.py:171: in run
+    self.env[node] = self.run_node(node)
+../../../pytorch/torch/_inductor/graph.py:1512: in run_node
+    result = super().run_node(n)
+../../../pytorch/torch/fx/interpreter.py:240: in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+../../../pytorch/torch/_inductor/graph.py:1183: in call_function
+    raise LoweringException(e, target, args, kwargs).with_traceback(
+../../../pytorch/torch/_inductor/graph.py:1173: in call_function
+    out = lowerings[target](*args, **kwargs)  # type: ignore[index]
+../../../pytorch/torch/_inductor/lowering.py:463: in wrapped
+    out = decomp_fn(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = TensorBox(StorageBox(
+  Pointwise(
+    'cpu',
+    torch.float32,
+    def inner_fn(index):
+        _ = index
+        tm...)
+        return tmp0
+    ,
+    ranges=[1],
+    origin_node=full_default,
+    origins=OrderedSet([full_default])
+  )
+))
+src = TensorBox(StorageBox(
+  InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.uint8, size=[1], stride=[1]))
+)), dim = 0, start = None, end = None, step = 1
+
+    @register_lowering(aten.slice_scatter, type_promotion_kind=None)
+    def slice_scatter(x, src, dim=0, start=None, end=None, step=1):
+>       assert x.get_dtype() == src.get_dtype()
+E       torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+E         target: aten.slice_scatter.default
+E         args[0]: TensorBox(StorageBox(
+E           Pointwise(
+E             'cpu',
+E             torch.float32,
+E             def inner_fn(index):
+E                 _ = index
+E                 tmp0 = ops.constant(0.0, torch.float32)
+E                 return tmp0
+E             ,
+E             ranges=[1],
+E             origin_node=full_default,
+E             origins=OrderedSet([full_default])
+E           )
+E         ))
+E         args[1]: TensorBox(StorageBox(
+E           InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.uint8, size=[1], stride=[1]))
+E         ))
+E       
+E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+../../../pytorch/torch/_inductor/lowering.py:2892: InductorError
+___________________________________________________________________________________________ test_slice_scatter_dtype_consistency[dtype5] ____________________________________________________________________________________________
+
+dtype = torch.uint16
+
+    @pytest.mark.parametrize("dtype", [torch.int8, torch.int16, torch.int32, torch.int64,
+                                       torch.uint8, torch.uint16, torch.uint32, torch.uint64])
+    def test_slice_scatter_dtype_consistency(dtype):
+        model = Model()
+        x = torch.tensor([0], dtype=dtype)  # Create tensor of given dtype
+    
+        # Run with Eager
+        eager_output = model(x)
+    
+        # Run with Inductor
+        compiled_model = torch.compile(model, backend="inductor")
+>       inductor_output = compiled_model(x)
+
+test_inductor_types.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../pytorch/torch/nn/modules/module.py:1751: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+../../../pytorch/torch/nn/modules/module.py:1762: in _call_impl
+    return forward_call(*args, **kwargs)
+../../../pytorch/torch/_dynamo/eval_frame.py:590: in _fn
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+../../../pytorch/torch/_inductor/compile_fx.py:763: in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+../../../pytorch/torch/_inductor/compile_fx.py:748: in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+../../../pytorch/torch/_inductor/compile_fx.py:1440: in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+../../../pytorch/torch/_inductor/compile_fx.py:1091: in codegen_and_compile
+    graph.run(*example_inputs)
+../../../pytorch/torch/_inductor/graph.py:875: in run
+    return super().run(*args)
+../../../pytorch/torch/fx/interpreter.py:171: in run
+    self.env[node] = self.run_node(node)
+../../../pytorch/torch/_inductor/graph.py:1512: in run_node
+    result = super().run_node(n)
+../../../pytorch/torch/fx/interpreter.py:240: in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+../../../pytorch/torch/_inductor/graph.py:1183: in call_function
+    raise LoweringException(e, target, args, kwargs).with_traceback(
+../../../pytorch/torch/_inductor/graph.py:1173: in call_function
+    out = lowerings[target](*args, **kwargs)  # type: ignore[index]
+../../../pytorch/torch/_inductor/lowering.py:463: in wrapped
+    out = decomp_fn(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = TensorBox(StorageBox(
+  Pointwise(
+    'cpu',
+    torch.float32,
+    def inner_fn(index):
+        _ = index
+        tm...)
+        return tmp0
+    ,
+    ranges=[1],
+    origin_node=full_default,
+    origins=OrderedSet([full_default])
+  )
+))
+src = TensorBox(StorageBox(
+  InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.uint16, size=[1], stride=[1]))
+)), dim = 0, start = None, end = None, step = 1
+
+    @register_lowering(aten.slice_scatter, type_promotion_kind=None)
+    def slice_scatter(x, src, dim=0, start=None, end=None, step=1):
+>       assert x.get_dtype() == src.get_dtype()
+E       torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+E         target: aten.slice_scatter.default
+E         args[0]: TensorBox(StorageBox(
+E           Pointwise(
+E             'cpu',
+E             torch.float32,
+E             def inner_fn(index):
+E                 _ = index
+E                 tmp0 = ops.constant(0.0, torch.float32)
+E                 return tmp0
+E             ,
+E             ranges=[1],
+E             origin_node=full_default,
+E             origins=OrderedSet([full_default])
+E           )
+E         ))
+E         args[1]: TensorBox(StorageBox(
+E           InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.uint16, size=[1], stride=[1]))
+E         ))
+E       
+E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+../../../pytorch/torch/_inductor/lowering.py:2892: InductorError
+___________________________________________________________________________________________ test_slice_scatter_dtype_consistency[dtype6] ____________________________________________________________________________________________
+
+dtype = torch.uint32
+
+    @pytest.mark.parametrize("dtype", [torch.int8, torch.int16, torch.int32, torch.int64,
+                                       torch.uint8, torch.uint16, torch.uint32, torch.uint64])
+    def test_slice_scatter_dtype_consistency(dtype):
+        model = Model()
+        x = torch.tensor([0], dtype=dtype)  # Create tensor of given dtype
+    
+        # Run with Eager
+        eager_output = model(x)
+    
+        # Run with Inductor
+        compiled_model = torch.compile(model, backend="inductor")
+>       inductor_output = compiled_model(x)
+
+test_inductor_types.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../pytorch/torch/nn/modules/module.py:1751: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+../../../pytorch/torch/nn/modules/module.py:1762: in _call_impl
+    return forward_call(*args, **kwargs)
+../../../pytorch/torch/_dynamo/eval_frame.py:590: in _fn
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+../../../pytorch/torch/_inductor/compile_fx.py:763: in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+../../../pytorch/torch/_inductor/compile_fx.py:748: in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+../../../pytorch/torch/_inductor/compile_fx.py:1440: in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+../../../pytorch/torch/_inductor/compile_fx.py:1091: in codegen_and_compile
+    graph.run(*example_inputs)
+../../../pytorch/torch/_inductor/graph.py:875: in run
+    return super().run(*args)
+../../../pytorch/torch/fx/interpreter.py:171: in run
+    self.env[node] = self.run_node(node)
+../../../pytorch/torch/_inductor/graph.py:1512: in run_node
+    result = super().run_node(n)
+../../../pytorch/torch/fx/interpreter.py:240: in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+../../../pytorch/torch/_inductor/graph.py:1183: in call_function
+    raise LoweringException(e, target, args, kwargs).with_traceback(
+../../../pytorch/torch/_inductor/graph.py:1173: in call_function
+    out = lowerings[target](*args, **kwargs)  # type: ignore[index]
+../../../pytorch/torch/_inductor/lowering.py:463: in wrapped
+    out = decomp_fn(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = TensorBox(StorageBox(
+  Pointwise(
+    'cpu',
+    torch.float32,
+    def inner_fn(index):
+        _ = index
+        tm...)
+        return tmp0
+    ,
+    ranges=[1],
+    origin_node=full_default,
+    origins=OrderedSet([full_default])
+  )
+))
+src = TensorBox(StorageBox(
+  InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.uint32, size=[1], stride=[1]))
+)), dim = 0, start = None, end = None, step = 1
+
+    @register_lowering(aten.slice_scatter, type_promotion_kind=None)
+    def slice_scatter(x, src, dim=0, start=None, end=None, step=1):
+>       assert x.get_dtype() == src.get_dtype()
+E       torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+E         target: aten.slice_scatter.default
+E         args[0]: TensorBox(StorageBox(
+E           Pointwise(
+E             'cpu',
+E             torch.float32,
+E             def inner_fn(index):
+E                 _ = index
+E                 tmp0 = ops.constant(0.0, torch.float32)
+E                 return tmp0
+E             ,
+E             ranges=[1],
+E             origin_node=full_default,
+E             origins=OrderedSet([full_default])
+E           )
+E         ))
+E         args[1]: TensorBox(StorageBox(
+E           InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.uint32, size=[1], stride=[1]))
+E         ))
+E       
+E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+../../../pytorch/torch/_inductor/lowering.py:2892: InductorError
+___________________________________________________________________________________________ test_slice_scatter_dtype_consistency[dtype7] ____________________________________________________________________________________________
+
+dtype = torch.uint64
+
+    @pytest.mark.parametrize("dtype", [torch.int8, torch.int16, torch.int32, torch.int64,
+                                       torch.uint8, torch.uint16, torch.uint32, torch.uint64])
+    def test_slice_scatter_dtype_consistency(dtype):
+        model = Model()
+        x = torch.tensor([0], dtype=dtype)  # Create tensor of given dtype
+    
+        # Run with Eager
+        eager_output = model(x)
+    
+        # Run with Inductor
+        compiled_model = torch.compile(model, backend="inductor")
+>       inductor_output = compiled_model(x)
+
+test_inductor_types.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../../pytorch/torch/nn/modules/module.py:1751: in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+../../../pytorch/torch/nn/modules/module.py:1762: in _call_impl
+    return forward_call(*args, **kwargs)
+../../../pytorch/torch/_dynamo/eval_frame.py:590: in _fn
+    raise e.remove_dynamo_frames() from None  # see TORCHDYNAMO_VERBOSE=1
+../../../pytorch/torch/_inductor/compile_fx.py:763: in _compile_fx_inner
+    raise InductorError(e, currentframe()).with_traceback(
+../../../pytorch/torch/_inductor/compile_fx.py:748: in _compile_fx_inner
+    mb_compiled_graph = fx_codegen_and_compile(
+../../../pytorch/torch/_inductor/compile_fx.py:1440: in fx_codegen_and_compile
+    return scheme.codegen_and_compile(gm, example_inputs, inputs_to_check, graph_kwargs)
+../../../pytorch/torch/_inductor/compile_fx.py:1091: in codegen_and_compile
+    graph.run(*example_inputs)
+../../../pytorch/torch/_inductor/graph.py:875: in run
+    return super().run(*args)
+../../../pytorch/torch/fx/interpreter.py:171: in run
+    self.env[node] = self.run_node(node)
+../../../pytorch/torch/_inductor/graph.py:1512: in run_node
+    result = super().run_node(n)
+../../../pytorch/torch/fx/interpreter.py:240: in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+../../../pytorch/torch/_inductor/graph.py:1183: in call_function
+    raise LoweringException(e, target, args, kwargs).with_traceback(
+../../../pytorch/torch/_inductor/graph.py:1173: in call_function
+    out = lowerings[target](*args, **kwargs)  # type: ignore[index]
+../../../pytorch/torch/_inductor/lowering.py:463: in wrapped
+    out = decomp_fn(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = TensorBox(StorageBox(
+  Pointwise(
+    'cpu',
+    torch.float32,
+    def inner_fn(index):
+        _ = index
+        tm...)
+        return tmp0
+    ,
+    ranges=[1],
+    origin_node=full_default,
+    origins=OrderedSet([full_default])
+  )
+))
+src = TensorBox(StorageBox(
+  InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.uint64, size=[1], stride=[1]))
+)), dim = 0, start = None, end = None, step = 1
+
+    @register_lowering(aten.slice_scatter, type_promotion_kind=None)
+    def slice_scatter(x, src, dim=0, start=None, end=None, step=1):
+>       assert x.get_dtype() == src.get_dtype()
+E       torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+E         target: aten.slice_scatter.default
+E         args[0]: TensorBox(StorageBox(
+E           Pointwise(
+E             'cpu',
+E             torch.float32,
+E             def inner_fn(index):
+E                 _ = index
+E                 tmp0 = ops.constant(0.0, torch.float32)
+E                 return tmp0
+E             ,
+E             ranges=[1],
+E             origin_node=full_default,
+E             origins=OrderedSet([full_default])
+E           )
+E         ))
+E         args[1]: TensorBox(StorageBox(
+E           InputBuffer(name='arg0_1', layout=FixedLayout('cpu', torch.uint64, size=[1], stride=[1]))
+E         ))
+E       
+E       Set TORCH_LOGS="+dynamo" and TORCHDYNAMO_VERBOSE=1 for more information
+
+../../../pytorch/torch/_inductor/lowering.py:2892: InductorError
+====================================================================================================== short test summary info ======================================================================================================
+FAILED test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype0] - torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+FAILED test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype1] - torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+FAILED test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype2] - torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+FAILED test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype3] - torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+FAILED test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype4] - torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+FAILED test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype5] - torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+FAILED test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype6] - torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+FAILED test_inductor_types.py::test_slice_scatter_dtype_consistency[dtype7] - torch._inductor.exc.InductorError: LoweringException: AssertionError: 
+========================================================================================================= 8 failed in 5.85s =======
