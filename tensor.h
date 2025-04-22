@@ -155,3 +155,7 @@ void optim_rmsprop_config(optim_rmsprop* self, float lr, float alpha, float eps)
 void optim_rmsprop_zerograd(optim_rmsprop* self);
 void optim_rmsprop_step(optim_rmsprop* self);
 void optim_rmsprop_delete(optim_rmsprop* self);
+
+/* utility */
+void normalize(float X[][4], int num_samples);
+void shuffle(float X[N_SAMPLES][N_FEATURES], int y[N_SAMPLES]);
