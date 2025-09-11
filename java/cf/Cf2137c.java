@@ -6,8 +6,8 @@ public class Cf2137c {
         FastScanner sc = new FastScanner();
         int t = sc.nextInt();
         while (t-- > 0) {
-            int b = sc.nextInt(), a = sc.nextInt();
-            int s = -1;
+            long b = sc.nextLong(), a = sc.nextLong();
+            long s = -1;
             if (((a + b) & 1) == 0) s = a+b;
             if (a%2 == 1 && b%2==1) s = Math.max(s, a*b+1);
             else if (a%2==0 && (a%4==0 || b%2==0)) s = Math.max(s, 2 + Math.floorDiv((a*b), 2));
