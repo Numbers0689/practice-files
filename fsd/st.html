@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Details</title>
+</head>
+<body>
+
+<h2>Student Details</h2>
+<a href="/add">Add New Student</a>
+<br><br>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <tr>
+        <th>Name</th>
+        <th>Roll No</th>
+        <th>Department</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    <tr>
+        <td>Rahul N</td>
+        <td>556</td>
+        <td>Computer Science</td>
+        <td>rahul@gmail.com</td>
+        <td>
+            <a href="/edit/1">Edit</a> |
+            <a href="/delete/1" onclick="return confirm('Delete this student?')">Delete</a>
+        </td>
+    </tr>
+    <tr>
+        <td>Smith</td>
+        <td>505</td>
+        <td>MTech</td>
+        <td>smith@google.com</td>
+        <td>
+            <a href="/edit/2">Edit</a> |
+            <a href="/delete/2" onclick="return confirm('Delete this student?')">Delete</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

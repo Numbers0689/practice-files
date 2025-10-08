@@ -1,0 +1,12 @@
+import React from "react";
+import CounterClass from "./CounterClass";
+import CounterFunction from "./CounterFunction";
+function App() {
+return (
+<div style={{ textAlign: "center", marginTop: "40px" }}>
+<CounterClass />
+<CounterFunction />
+</div>
+);
+}
+export default App;

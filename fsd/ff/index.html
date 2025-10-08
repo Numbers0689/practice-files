@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Registration Form with Live Validation</title>
+<style>
+form {
+max-width: 400px;
+margin: 20px auto;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-family: Arial, sans-serif;
+}
+label {
+display: block;
+margin-top: 10px;
+}
+input {
+width: 100%;
+padding: 6px;
+margin-top: 4px;
+box-sizing: border-box;
+}
+.error {
+color: red;
+font-size: 0.9em;
+min-height: 18px;
+}
+.success {
+color: green;
+font-weight: bold;
+margin-top: 15px;
+}
+.valid {
+color: green;
+font-size: 0.9em;
+min-height: 18px;
+}
+</style>
+</head>
+<body>
+<form id="registrationForm" novalidate>
+<h2>Register</h2>
+<label for="username">Username:</label>
+<input type="text" id="username" name="username" />
+<div id="usernameError" class="error"></div>
+<label for="password">Password:</label>
+<input type="password" id="password" name="password" />
+<div id="passwordError" class="error"></div>
+<label for="email">Email:</label>
+<input type="email" id="email" name="email" />
+<div id="emailError" class="error"></div>
+<label for="age">Age:</label>
+<input type="number" id="age" name="age" />
+<div id="ageError" class="error"></div>
+<button type="submit">Register</button>
+<div id="successMessage" class="success"></div>
+</form>
+<script>
+const form = document.getElementById('registrationForm');
+// Validation patterns
+const usernamePattern = /^[A-Za-z][A-Za-z0-9_]{2,14}$/;
+const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const usernameInput = form.username;
+const passwordInput = form.password;
+const emailInput = form.email;
+const ageInput = form.age;
+// Helper to show errors or valid message
+function showMessage(id, message, isError = true) {
+const el = document.getElementById(id);
+el.textContent = message;
+el.className = isError ? 'error' : 'valid';
+}
+// Live validation functions
+function validateUsername() {
+const val = usernameInput.value.trim();
+if (!val) {
+showMessage('usernameError', 'Username is required.');
+return false;
+} else if (!usernamePattern.test(val)) {
+showMessage('usernameError', '3-15 chars, start with letter,letters/numbers/_ only.');
+return false;
+} else {
+showMessage('usernameError', 'Looks good!', false);
+return true;
+}
+}
+function validatePassword() {
+const val = passwordInput.value;
+if (!val) {
+showMessage('passwordError', 'Password is required.');
+return false;
+} else if (!passwordPattern.test(val)) {
+showMessage(
+'passwordError',
+'Min 8 chars with uppercase, lowercase, digit & special (!@#$%^&*).'
+);
+return false;
+} else {
+showMessage('passwordError', 'Strong password!', false);
+return true;
+}
+}
+function validateEmail() {
+const val = emailInput.value.trim();
+if (!val) {
+showMessage('emailError', 'Email is required.');
+return false;
+} else if (!emailPattern.test(val)) {
+showMessage('emailError', 'Invalid email format.');
+return false;
+} else {
+showMessage('emailError', 'Valid email!', false);
+return true;
+}
+}
+function validateAge() {
+const val = ageInput.value.trim();
+const age = parseInt(val, 10);
+if (!val) {
+showMessage('ageError', 'Age is required.');
+return false;
+} else if (isNaN(age) || age < 18 || age > 100) {
+showMessage('ageError', 'Age must be between 18 and 100.');
+return false;
+} else {
+showMessage('ageError', 'Valid age.', false);
+return true;
+}
+}
+// Attach live validation events
+usernameInput.addEventListener('input', validateUsername);
+passwordInput.addEventListener('input', validatePassword);
+emailInput.addEventListener('input', validateEmail);
+ageInput.addEventListener('input', validateAge);
+// Submit event
+form.addEventListener('submit', function (event) {
+event.preventDefault();
+const validUsername = validateUsername();
+const validPassword = validatePassword();
+const validEmail = validateEmail();
+const validAge = validateAge();
+if (validUsername && validPassword && validEmail && validAge) {
+document.getElementById('successMessage').textContent =
+'Registration successful!';
+form.reset();
+// Clear messages after reset
+['usernameError', 'passwordError', 'emailError', 'ageError'].forEach(
+(id) => {
+    document.getElementById(id).textContent = '';
+}
+);
+} else {
+document.getElementById('successMessage').textContent = '';
+}
+});
+</script>
+</body>
+</html>
