@@ -12,7 +12,7 @@ public class Cf2161a {
             for (int i = 0; i < n; i++) {
                 if (r < x) c++;
                 else if (s.charAt(i) == '1') {
-                    if (r - d > 0) r -= d;
+                    r = Math.max(0, r-d);
                     c++;
                 }
             }
