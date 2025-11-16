@@ -15,8 +15,7 @@ public class Cf2169a {
                 else if (a < c) p++;
             }
             if (e > p) System.out.println(a-1);
-            else if (p > e) System.out.println(a+1);
-            else System.out.println(a);
+            else System.out.println(a+1);
         }
     }
 }
