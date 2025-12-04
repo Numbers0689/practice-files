@@ -1,0 +1,35 @@
+import java.util.*;
+import java.io.*;
+
+public class Cf2158a {
+    public static void main(String[] args) {
+        FastScanner sc = new FastScanner();
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int y = sc.nextInt(), r = sc.nextInt();
+
+            int s = y / 2 + r;
+            System.out.println(Math.min(n, s));
+        }
+    }
+}
+
+class FastScanner {
+    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st=new StringTokenizer("");
+    String next() {
+        while (!st.hasMoreTokens())
+            try { 
+                st=new StringTokenizer(br.readLine());				               
+            } catch (IOException e) {}
+        return st.nextToken();
+    }
+    
+    int nextInt() {
+        return Integer.parseInt(next());
+    }
+    long nextLong() {
+        return Long.parseLong(next());
+    }
+}
