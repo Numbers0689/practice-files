@@ -1,25 +1,29 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf2173b {
+public class Cf2175a {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
         int t = sc.nextInt();
         while (t-- > 0) {
             int n = sc.nextInt();
             int[] a = new int[n];
-            int[] b = new int[n];
-            
-            for (int i = 0; i < n; i++) a[i] = sc.nextInt();
-            for (int i = 0; i < n; i++) b[i] = sc.nextInt();
-            long max = 0, min = 0;
+            Set<Integer> s = new HashSet<>();
             for (int i = 0; i < n; i++) {
-                long nmax = Math.max(max - a[i], b[i] - min);
-                long nmin = Math.min(min - a[i], b[i] - max);
-                max = nmax;
-                min = nmin;
+                a[i] = sc.nextInt();
+                s.add(a[i]);
             }
-            System.out.println(max);
+            int x = s.size();
+            int e = -1;
+            Arrays.sort(a);
+            for (int i = 0; i < n; i++) {
+                if (a[i] >= x) {
+                    e = a[i];
+                    break;
+                }
+            }
+            if (e < 0) System.out.println(1000);
+            else System.out.println(e);
         }
     }
 }
