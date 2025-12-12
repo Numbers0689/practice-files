@@ -8,15 +8,13 @@ public class Cf2176b {
         while (t-- > 0) {
             int n = sc.nextInt();
             String s = sc.next();
+            String s1 = s+s;
             int m = 0;
             int d = 0;
-            for (int i = 0; i < n; i++) {
-                if (s.charAt(i) == '0')  {
-                    m++;
-                } else {
-                    d = d < m ? m : d;
-                    m = 0;
-                }
+            for (int i = 0; i < 2*n; i++) {
+                if (s1.charAt(i) == '1') m = 0;
+                else m++;
+                d = d < m ? m : d;
             }
             d = d < m ? m : d;
             System.out.println(d);
