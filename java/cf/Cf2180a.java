@@ -1,21 +1,21 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf2180b {
+public class Cf2180a {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
         int t = sc.nextInt();
         while (t-- > 0) {
-            int n = sc.nextInt();
-            String[] a = new String[n];
-            for (int i = 0; i < n; i++) a[i] = sc.next();
-            String s = a[0];
-            for (int i = 1; i < n; i++) {
-                String temp = s + a[i];
-                if (temp.compareTo(a[i] + s) < 0) s = temp;
-                else s = a[i] + s;
+            int l = sc.nextInt(), a = sc.nextInt(), b = sc.nextInt();
+            Set<Integer> s = new HashSet<>();
+            int m = a;
+            a = (a+b) % l;
+            while (!s.contains(a)) {
+                m = Math.max(m, a);
+                s.add(a);
+                a = (a+b) % l;
             }
-            System.out.println(s);
+            System.out.println(m);
         }
     }
 }
