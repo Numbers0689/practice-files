@@ -1,19 +1,13 @@
 import java.util.*;
 import java.io.*;
 
-public class Cf2179d {
+public class Cf2179e {
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
         int t = sc.nextInt();
         while (t-- > 0) {
             int n = sc.nextInt();
-            System.out.print((int)(Math.pow(2, n) - 1) + " ");    
-            for (int i = 1; i <= n; i++) {
-                for (int j = 0; j < Math.pow(2, i); j += 2) {
-                    System.out.print((int)(j*Math.pow(2, n-i)+Math.pow(2, n-i)-1)+" ");
-                }
-            }
-            System.out.println();
+            
         }
     }
 }
