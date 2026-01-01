@@ -6,7 +6,11 @@ public class Cf2179e {
         FastScanner sc = new FastScanner();
         int t = sc.nextInt();
         while (t-- > 0) {
-            int n = sc.nextInt();
+            int n = sc.nextInt(), x = sc.nextInt(), y = sc.nextInt();
+            String s = sc.next();
+            int[] p = new int[n];
+            for (int i = 0; i < n; i++) p[i] = sc.nextInt();
+
             
         }
     }
