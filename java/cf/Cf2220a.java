@@ -1,0 +1,46 @@
+import java.util.*;
+import java.io.*;
+
+public class Cf2220a {
+    public static void main(String[] args) {
+        FastScanner sc = new FastScanner();
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int[] a = new int[n];
+            for (int i = 0; i < n; i++) a[i] = sc.nextInt();
+            Arrays.sort(a);
+            boolean flag = false;
+            for (int i = 0; i < n-1; i++) {
+                if (a[i] == a[i+1]) {
+                    System.out.println(-1);
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                for (int i = n-1; i >= 0; i--) System.out.print(a[i] + " ");
+                System.out.println();
+            }
+        }
+    }
+}
+
+class FastScanner {
+    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st=new StringTokenizer("");
+    String next() {
+        while (!st.hasMoreTokens())
+            try { 
+                st=new StringTokenizer(br.readLine());				               
+            } catch (IOException e) {}
+        return st.nextToken();
+    }
+    
+    int nextInt() {
+        return Integer.parseInt(next());
+    }
+    long nextLong() {
+        return Long.parseLong(next());
+    }
+}
