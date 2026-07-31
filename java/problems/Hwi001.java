@@ -2,29 +2,24 @@ import java.util.*;
 import java.io.*;
 
 public class Hwi001 {
+    static String d = "abc";
     public static void main(String[] args) {
         FastScanner sc = new FastScanner();
-        int n = sc.nextInt();
-        int[] a = new int[n];
-        for (int i = 0; i < n; i++) a[i] = sc.nextInt();
-        int q = sc.nextInt();
-        int sum = 0;
-        System.out.println(Arrays.toString(a));
-        for (int i = 0; i < q; i++) {
-            int s = sc.nextInt();
-            int l = sc.nextInt(), r = sc.nextInt();
-            if (s == 1) {
-                for (int j = l; j <= r; j++) {
-                    a[j] = (j-l+1)*a[l];
-                }
-            } else {
-                for (int j = l; j <= r; j++) {
-                    sum += a[j];
-                }
-            }
+        List<String> res = new ArrayList<>();
+
+        bt(res, 3, "");
+        System.out.println(res.toString());
+    }
+
+    public static void bt(List<String> res, int n, String s) {
+        if (s.length() == n) {
+            res.add(s);
+            return;
         }
-        System.out.println(Arrays.toString(a));
-        System.out.println(sum);
+        for (char dd : d.toCharArray()) {
+            if (!s.contains(dd + ""))
+            bt(res, n, s+dd);
+        }
     }
 }
 
